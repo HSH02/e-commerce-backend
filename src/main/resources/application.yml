@@ -1,0 +1,64 @@
+# 공통 설정 - 모든 환경에서 상속받아 사용
+spring:
+  application:
+    name: e-commerce
+
+  aop:
+    proxy-target-class: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - profile
+              - email
+
+  datasource:
+    url: jdbc:h2:file:./data/db;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # test 환경에서만 create-drop으로 오버라이드
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.H2Dialect
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  h2:
+    console:
+      enabled: true  # prod 환경에서 false로 오버라이드 가능
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+
+# 기본 쿠키 설정
+app:
+  cookie:
+    secure: false  # prod 환경에서 true로 오버라이드
+    http-only: true
+    same-site: Lax
+
+logging:
+  level:
+    root: INFO
+    org.springframework.boot: INFO
+    com.ecommerce: INFO
+    com.ecommerce.global.aop: DEBUG
