@@ -1,12 +1,15 @@
-package com.ecommerce.domain.user.service;
+package com.ecommerce.global.infra.web;
 
-import com.ecommerce.domain.user.dto.response.TokenPair;
+import com.ecommerce.api.v1.user.dto.response.TokenPair;
 import com.ecommerce.global.infra.security.jwt.TokenCookieProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
+/**
+ * HTTP 응답 처리
+ */
 @Service
 @RequiredArgsConstructor
 public class CookieResponseService {

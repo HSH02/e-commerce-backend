@@ -1,7 +1,7 @@
 package com.ecommerce.domain.user.service;
 
-import com.ecommerce.domain.user.dto.request.RegisterRequest;
-import com.ecommerce.domain.user.dto.response.UserInfoResponse;
+import com.ecommerce.api.v1.user.dto.request.RegisterRequest;
+import com.ecommerce.api.v1.user.dto.response.UserInfoResponse;
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.domain.user.entity.UserRole;
 import com.ecommerce.domain.user.repository.UserRepository;
@@ -15,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 사용자 도메인 핵심 로직
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

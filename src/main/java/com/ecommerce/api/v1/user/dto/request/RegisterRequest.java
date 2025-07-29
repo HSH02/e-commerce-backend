@@ -1,4 +1,4 @@
-package com.ecommerce.domain.user.dto.request;
+package com.ecommerce.api.v1.user.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
