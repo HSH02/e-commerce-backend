@@ -50,7 +50,7 @@ docker-compose -f docker-compose.dev.yml up -d
 docker-compose -f docker-compose.dev.yml logs -f app
 ```
 
-3. **코드 변경 시 자동 적용!** - 코드를 수정하면 몇 초 내에 자동으로 반영됩니다
+3. **코드 변경 시 자동 적용** - 코드를 수정하면 몇 초 내에 자동으로 반영됩니다
 
 4. 개발 환경 중지:
 
@@ -79,31 +79,4 @@ docker-compose logs -f
 ```bash
 docker-compose down
 ```
-
-#### 💡 환경 간 주요 차이점
-
-| 기능 | 개발 환경 | 운영 환경 |
-|------|----------|----------|
-| **코드 변경** | ✅ 실시간 적용 | ❌ 재빌드 필요 |
-| **Spring DevTools** | ✅ 활성화 | ❌ 비활성화 |
-| **이미지 크기** | 큼 (Gradle 포함) | 작음 (JRE만) |
-| **시작 속도** | 느림 (컴파일) | 빠름 (JAR 실행) |
-| **메모리 사용량** | 높음 | 낮음 |
-| **로그 레벨** | DEBUG | INFO |
-
-#### 로컬에서 직접 실행 (Docker 없이)
-
-1. 애플리케이션 빌드:
-
-```bash
-./gradlew clean build
-```
-
-2. 애플리케이션 실행:
-
-```bash
-java -jar build/libs/*.jar
-```
-
-> **참고**: 로컬 실행 시 Redis 등의 의존성 서비스를 별도로 실행해야 합니다.
 

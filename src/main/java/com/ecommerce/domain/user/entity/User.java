@@ -1,16 +1,14 @@
 package com.ecommerce.domain.user.entity;
 
+import com.ecommerce.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +22,7 @@ import static com.ecommerce.global.utils.constants.ValidationConstants.*;
 @AllArgsConstructor
 @Builder
 @Getter
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,18 +59,6 @@ public class User {
     @Builder.Default
     @Column(nullable = false)
     private boolean emailVerified = false;
-
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
-    public void update(String nickname) {
-        this.nickname = nickname;
-    }
 
     public void addSocialAccount(SocialAccount socialAccount) {
         socialAccounts.add(socialAccount);
