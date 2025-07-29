@@ -1,0 +1,40 @@
+services:
+
+  # 1. 개발용 스프링 부트 애플리케이션 서비스
+  app:
+    build:
+      context: .
+      target: dev        # 개발용 스테이지 사용
+    container_name: e-commerce-dev
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app                    # 현재 폴더 → 컨테이너 /app
+      - /app/build               # build 폴더는 컨테이너 것 사용
+      - /app/.gradle             # gradle 캐시는 컨테이너 것 사용
+    depends_on:
+      - redis
+    environment:
+      # 개발 환경 설정
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DEVTOOLS_RESTART_ENABLED=true
+      - SPRING_DEVTOOLS_LIVERELOAD_ENABLED=true
+
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ACCESS_TOKEN_EXPIRATION=${JWT_ACCESS_TOKEN_EXPIRATION}
+      - JWT_REFRESH_TOKEN_EXPIRATION=${JWT_REFRESH_TOKEN_EXPIRATION}
+
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+
+  # 2. Redis 캐시 서버 서비스 (기존과 동일)
+  redis:
+    image: redis:alpine
+    container_name: my-redis-dev
+    restart: on-failure
+    ports:
+      - "6379:6379"

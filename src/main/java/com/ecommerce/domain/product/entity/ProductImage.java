@@ -1,7 +1,6 @@
-package com.ecommerce.domain.user.entity;
+package com.ecommerce.domain.product.entity;
 
 import com.ecommerce.global.entity.BaseEntity;
-import com.ecommerce.global.utils.constants.Provider;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,25 +8,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "social_accounts")
+@Table(name = "product_images")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SocialAccount extends BaseEntity {
+public class ProductImage extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Provider provider;
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     @Column(nullable = false)
-    private String providerId; // 소셜 서비스에서 제공하는 고유 ID
+    private String imageUrl;
+
+    private String altText;
+
+    @Column(nullable = false)
+    private boolean isMain;
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

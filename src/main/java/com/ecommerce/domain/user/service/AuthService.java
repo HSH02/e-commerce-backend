@@ -1,7 +1,7 @@
 package com.ecommerce.domain.user.service;
 
-import com.ecommerce.domain.user.dto.request.LoginRequest;
-import com.ecommerce.domain.user.dto.response.TokenPair;
+import com.ecommerce.api.v1.user.dto.request.LoginRequest;
+import com.ecommerce.api.v1.user.dto.response.TokenPair;
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.global.utils.exception.ErrorCode;
 import com.ecommerce.global.utils.exception.ServiceException;
@@ -11,6 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 인증 로직
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

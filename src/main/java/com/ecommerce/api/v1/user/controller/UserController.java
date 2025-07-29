@@ -1,11 +1,11 @@
-package com.ecommerce.domain.user.controller;
+package com.ecommerce.api.v1.user.controller;
 
-import com.ecommerce.domain.user.dto.request.LoginRequest;
-import com.ecommerce.domain.user.dto.request.RegisterRequest;
-import com.ecommerce.domain.user.dto.response.TokenPair;
-import com.ecommerce.domain.user.dto.response.UserInfoResponse;
+import com.ecommerce.api.v1.user.dto.request.LoginRequest;
+import com.ecommerce.api.v1.user.dto.request.RegisterRequest;
+import com.ecommerce.api.v1.user.dto.response.TokenPair;
+import com.ecommerce.api.v1.user.dto.response.UserInfoResponse;
 import com.ecommerce.domain.user.service.AuthService;
-import com.ecommerce.domain.user.service.CookieResponseService;
+import com.ecommerce.global.infra.web.CookieResponseService;
 import com.ecommerce.domain.user.service.UserService;
 import com.ecommerce.global.utils.dto.RsData;
 import com.nimbusds.oauth2.sdk.util.StringUtils;

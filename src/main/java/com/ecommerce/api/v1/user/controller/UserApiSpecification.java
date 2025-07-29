@@ -1,8 +1,8 @@
-package com.ecommerce.domain.user.controller;
+package com.ecommerce.api.v1.user.controller;
 
-import com.ecommerce.domain.user.dto.request.LoginRequest;
-import com.ecommerce.domain.user.dto.request.RegisterRequest;
-import com.ecommerce.domain.user.dto.response.UserInfoResponse;
+import com.ecommerce.api.v1.user.dto.request.LoginRequest;
+import com.ecommerce.api.v1.user.dto.request.RegisterRequest;
+import com.ecommerce.api.v1.user.dto.response.UserInfoResponse;
 import com.ecommerce.global.utils.dto.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

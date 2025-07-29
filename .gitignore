@@ -16,7 +16,26 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+# .env 파일 (민감한 환경 변수 포함)
+.env
 
+# 빌드 결과물
+build/
+target/
+*.jar
+
+# 로그 파일
+logs/
+*.log
+
+# IDE 파일
+.idea/
+.vscode/
+*.iml
+
+# 기타
+.DS_Store
+node_modules/
 ### IntelliJ IDEA ###
 .idea
 *.iws

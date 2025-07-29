@@ -1,6 +1,6 @@
 package com.ecommerce.domain.user.service;
 
-import com.ecommerce.domain.user.dto.response.TokenPair;
+import com.ecommerce.api.v1.user.dto.response.TokenPair;
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.global.infra.redis.RefreshTokenService;
 import com.ecommerce.global.infra.security.jwt.JwtProvider;
@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/**
+ * 토큰 생명주기 관리
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
