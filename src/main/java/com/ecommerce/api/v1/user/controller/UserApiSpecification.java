@@ -14,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "유저")
+@Tag(name = "유저", description = "유저 API")
 public interface UserApiSpecification {
 
     @Operation(summary = "회원 가입")

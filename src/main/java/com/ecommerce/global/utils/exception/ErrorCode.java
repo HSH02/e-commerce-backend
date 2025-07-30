@@ -33,7 +33,11 @@ public enum ErrorCode {
     EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 Access Token 입니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 Refresh Token 입니다."),
 
-    // REIDS
+    // Product
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상품을 찾을 수 없습니다."),
+    STOCK_CANNOT_MINUS(HttpStatus.UNPROCESSABLE_ENTITY, "재고는 0보다 작을 수 없습니다."),
+
+    // Redis
     REDIS_OPERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Redis 작업 중 오류가 발생했습니다."),
     INVALID_REFRESH_REDIS_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Refresh Token이 유효하지 않거나 탈취되었을 수 있습니다"),
 

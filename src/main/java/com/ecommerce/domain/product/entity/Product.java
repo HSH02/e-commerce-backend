@@ -1,6 +1,8 @@
 package com.ecommerce.domain.product.entity;
 
 import com.ecommerce.global.entity.BaseEntity;
+import com.ecommerce.global.utils.exception.ErrorCode;
+import com.ecommerce.global.utils.exception.ServiceException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,31 +42,42 @@ public class Product extends BaseEntity {
     private boolean isActive = true;
 
     @Builder.Default
-    @ManyToMany
-    @JoinTable(
-        name = "product_category",
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> categories = new ArrayList<>();
-
-    @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> images = new ArrayList<>();
 
-    public void addCategory(Category category) {
-        this.categories.add(category);
+    public void updateDetails(
+            String name,
+            String description,
+            BigDecimal price,
+            Integer stockQuantity,
+            Boolean isActive
+    ) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (description != null) {
+            this.description = description;
+        }
+        if (price != null) {
+            this.price = price;
+        }
+        if (stockQuantity != null) {
+            this.stockQuantity = stockQuantity;
+        }
+        if (isActive != null) {
+            this.isActive = isActive;
+        }
+    }
+
+    public void updateStock(int quantity) {
+        this.stockQuantity = quantity;
+        if (this.stockQuantity < 0) {
+            throw new ServiceException(ErrorCode.STOCK_CANNOT_MINUS);
+        }
     }
 
     public void addImage(ProductImage image) {
         this.images.add(image);
         image.setProduct(this);
-    }
-
-    public void updateStock(int quantity) {
-        this.stockQuantity += quantity;
-        if (this.stockQuantity < 0) {
-            throw new IllegalStateException("재고는 0보다 작을 수 없습니다.");
-        }
     }
 }
