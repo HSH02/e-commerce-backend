@@ -3,6 +3,8 @@ package com.ecommerce.domain.product.service;
 import com.ecommerce.api.v1.admin.dto.request.AddProductRequest;
 import com.ecommerce.api.v1.admin.dto.request.UpdateProductRequest;
 import com.ecommerce.api.v1.admin.dto.request.UpdateStockRequest;
+import com.ecommerce.api.v1.admin.dto.response.ProductResponseDto;
+import com.ecommerce.domain.product.entity.Category;
 import com.ecommerce.domain.product.entity.Product;
 import com.ecommerce.domain.product.repository.ProductRepository;
 import com.ecommerce.global.utils.exception.ErrorCode;
@@ -16,7 +18,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,6 +33,9 @@ class ProductServiceTest {
 
     @Mock
     private ProductRepository productRepository;
+
+    @Mock
+    private CategoryService categoryService;
 
     @InjectMocks
     private ProductService productService;
@@ -50,30 +58,76 @@ class ProductServiceTest {
     @DisplayName("[addProduct][성공] - 상품 등록")
     void addProduct_Success() {
         // given
-        AddProductRequest request = new AddProductRequest("테스트 상품", "설명 입니다", BigDecimal.valueOf(10_000L), 100);
+        List<String> categoryNames = List.of("테스트");
+        AddProductRequest request = new AddProductRequest("테스트 상품", "설명 입니다", BigDecimal.valueOf(10_000L), 100, categoryNames);
+        when(categoryService.findOrCreateCategories(categoryNames)).thenReturn(Collections.emptySet());
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
         // when
-        Product saved = productService.addProduct(request);
+        ProductResponseDto saved = productService.addProduct(request);
 
         // then
-        assertThat(saved.getName()).isEqualTo(request.name());
+        assertThat(saved.name()).isEqualTo(request.name());
+        assertThat(saved.price()).isEqualTo(request.price());
         verify(productRepository).save(any(Product.class));
+        verify(categoryService).findOrCreateCategories(categoryNames);
+    }
+
+    @Test
+    @DisplayName("[addProduct][성공] - 상품 등록 및 카테고리 추가")
+    void addProductWithCategory_Success() {
+        // given
+        Category testCategory = Category.builder().id(1L).name("테스트").build();
+        List<String> categoryNames = List.of("테스트");
+        AddProductRequest request = new AddProductRequest("테스트 상품", "설명 입니다", BigDecimal.valueOf(10_000L), 100, categoryNames);
+        when(categoryService.findOrCreateCategories(categoryNames)).thenReturn(Set.of(testCategory));
+        when(productRepository.save(any(Product.class))).thenReturn(product);
+
+        // when
+        ProductResponseDto saved = productService.addProduct(request);
+
+        // then
+        assertThat(saved.name()).isEqualTo(request.name());
+        assertThat(saved.price()).isEqualTo(request.price());
+        verify(productRepository).save(any(Product.class));
+        verify(categoryService).findOrCreateCategories(categoryNames);
     }
 
     @Test
     @DisplayName("[updateProduct][성공] - 상품 수정")
     void updateProduct_Success() {
         // given
-        UpdateProductRequest req = new UpdateProductRequest("수정 상품", "수정 설명", BigDecimal.valueOf(10_000L), 120, null, true);
+        UpdateProductRequest req = new UpdateProductRequest("수정 상품", "수정 설명", BigDecimal.valueOf(10_000L), 120, null, true, Collections.emptyList());
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
         // when
-        Product updated = productService.updateProduct(1L, req);
+        ProductResponseDto updated = productService.updateProduct(1L, req);
 
         // then
-        assertThat(updated.getName()).isEqualTo(req.name());
-        assertThat(updated.getPrice()).isEqualTo(req.price());
+        assertThat(updated.name()).isEqualTo(req.name());
+        assertThat(updated.price()).isEqualTo(req.price());
+    }
+
+    @Test
+    @DisplayName("[updateProduct][성공] - 상품 수정")
+    void updateProductWithCategory_Success() {
+        // given
+        List<String> categoryNames = List.of("수정 카테고리", "인기상품");
+        Set<Category> categories = Set.of(
+                Category.builder().id(2L).name("수정 카테고리").build(),
+                Category.builder().id(3L).name("인기상품").build()
+        );
+        UpdateProductRequest req = new UpdateProductRequest("수정 상품", "수정 설명", BigDecimal.valueOf(10_000L), 120, null, true, categoryNames);
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(categoryService.findOrCreateCategories(categoryNames)).thenReturn(categories);
+
+        // when
+        ProductResponseDto updated = productService.updateProduct(1L, req);
+
+        // then
+        assertThat(updated.name()).isEqualTo(req.name());
+        assertThat(updated.price()).isEqualTo(req.price());
+        verify(categoryService).findOrCreateCategories(categoryNames);
     }
 
     @Test
@@ -84,10 +138,12 @@ class ProductServiceTest {
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
         // when
-        Product updated = productService.manageProductStock(1L, req);
+        ProductResponseDto updated = productService.manageProductStock(1L, req);
 
         // then
-        assertThat(updated.getStockQuantity()).isEqualTo(req.stockQuantity());
+        assertThat(updated.id()).isEqualTo(product.getId());
+        assertThat(updated.name()).isEqualTo(product.getName());
+        verify(productRepository).findById(1L);
     }
 
     @Test

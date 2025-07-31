@@ -3,6 +3,7 @@ package com.ecommerce.api.v1.admin.controller;
 import com.ecommerce.api.v1.admin.dto.request.AddProductRequest;
 import com.ecommerce.api.v1.admin.dto.request.UpdateProductRequest;
 import com.ecommerce.api.v1.admin.dto.request.UpdateStockRequest;
+import com.ecommerce.api.v1.admin.dto.response.ProductResponseDto;
 import com.ecommerce.domain.product.entity.Product;
 import com.ecommerce.domain.product.service.ProductService;
 import com.ecommerce.global.utils.dto.RsData;
@@ -20,28 +21,28 @@ public class AdminController implements AdminAPiSpecification {
     private final ProductService productService;
 
     @PostMapping("/products")
-    public RsData<Product> addProduct(
+    public RsData<ProductResponseDto> addProduct(
             @RequestBody @Valid AddProductRequest request
     ) {
-        Product product = productService.addProduct(request);
+        ProductResponseDto product = productService.addProduct(request);
         return RsData.success(HttpStatus.CREATED, product, "상품 등록이 완료되었습니다");
     }
 
     @PutMapping("/products/{productId}")
-    public RsData<Product> updateProduct(
+    public RsData<ProductResponseDto> updateProduct(
             @PathVariable Long productId,
             @RequestBody @Valid UpdateProductRequest request
     ) {
-        Product product = productService.updateProduct(productId, request);
+        ProductResponseDto product = productService.updateProduct(productId, request);
         return RsData.success(HttpStatus.OK, product, "상품 수정이 완료되었습니다");
     }
 
     @PutMapping("/products/{productId}/stock")
-    public RsData<Product> manageProductStock(
+    public RsData<ProductResponseDto> manageProductStock(
             @PathVariable Long productId,
             @RequestBody @Valid UpdateStockRequest request
     ) {
-        Product product = productService.manageProductStock(productId, request);
+        ProductResponseDto product = productService.manageProductStock(productId, request);
         return RsData.success(HttpStatus.OK, product, "재고 수정이 완료되었습니다");
     }
 
