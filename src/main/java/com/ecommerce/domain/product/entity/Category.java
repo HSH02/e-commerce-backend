@@ -1,6 +1,5 @@
 package com.ecommerce.domain.product.entity;
 
-
 import com.ecommerce.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,11 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "    @JsonBackReference\ncategory")
+@Table(name = "category")
 @Getter
 @Builder
 @NoArgsConstructor
@@ -30,3 +30,4 @@ public class Category extends BaseEntity {
     @Builder.Default
     private Set<Product> products = new HashSet<>();
 }
+

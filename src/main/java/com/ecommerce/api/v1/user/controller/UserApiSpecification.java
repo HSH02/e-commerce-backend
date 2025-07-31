@@ -61,4 +61,5 @@ public interface UserApiSpecification {
     RsData<UserInfoResponse> getMyInfo(
             Authentication authentication
     );
+
 }

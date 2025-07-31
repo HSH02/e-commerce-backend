@@ -3,6 +3,7 @@ package com.ecommerce.domain.product.entity;
 import com.ecommerce.global.entity.BaseEntity;
 import com.ecommerce.global.utils.exception.ErrorCode;
 import com.ecommerce.global.utils.exception.ServiceException;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,6 +57,7 @@ public class Product extends BaseEntity {
     )
     @Builder.Default
     private Set<Category> category = new HashSet<>();
+
 
     @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
