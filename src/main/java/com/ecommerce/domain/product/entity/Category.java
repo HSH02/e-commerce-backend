@@ -7,11 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "category")
 @Getter
 @Builder
 @NoArgsConstructor
@@ -22,14 +23,11 @@ public class Category extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
+    @ManyToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @Builder.Default
-    @Column(nullable = false)
-    private boolean isActive = true;
-
-    @Builder.Default
-    @ManyToMany(mappedBy = "categories")
-    private List<Product> products = new ArrayList<>();
+    private Set<Product> products = new HashSet<>();
 }
+

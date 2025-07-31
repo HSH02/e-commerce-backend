@@ -14,38 +14,52 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "유저")
+@Tag(name = "유저", description = "유저 API")
 public interface UserApiSpecification {
 
     @Operation(summary = "회원 가입")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Created")
     })
-    RsData<Void> register(@Valid @RequestBody RegisterRequest request);
+    RsData<Void> register(
+            @Valid @RequestBody RegisterRequest request
+    );
 
     @Operation(summary = "로그인")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
     })
-    RsData<Void> login(@Valid @RequestBody LoginRequest request, HttpServletResponse response);
+    RsData<Void> login(
+            @Valid @RequestBody LoginRequest request,
+            HttpServletResponse response
+    );
 
     @Operation(summary = "토큰 갱신")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    RsData<Void> refreshTokens(@CookieValue("refresh_token") String refreshToken, HttpServletResponse response);
+    RsData<Void> refreshTokens(
+            @CookieValue("refresh_token") String refreshToken,
+            HttpServletResponse response
+    );
 
     @Operation(summary = "로그아웃")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
     })
-    RsData<Void> logout(Authentication authentication, HttpServletResponse response);
+    RsData<Void> logout(
+            Authentication authentication,
+            HttpServletResponse response
+    );
 
     @Operation(summary = "내 정보")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
-    RsData<UserInfoResponse> getMyInfo(Authentication authentication);
+    RsData<UserInfoResponse> getMyInfo(
+            Authentication authentication
+    );
+
 }

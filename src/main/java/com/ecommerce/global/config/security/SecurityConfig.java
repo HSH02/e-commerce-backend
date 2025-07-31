@@ -87,7 +87,11 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/redis-test/**").permitAll()       // Redis
 
                                 // 그 외 모든 요청은 인증 필요
-                                .anyRequest().authenticated()
+
+                                // 개발용
+                                .anyRequest().permitAll()
+
+//                                 .anyRequest().authenticated()
                 );
 
         return http.build();
