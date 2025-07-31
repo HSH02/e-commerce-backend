@@ -1,21 +1,25 @@
 package com.ecommerce.domain.product.service;
 
-import com.ecommerce.api.v1.product.dto.request.AddProductRequest;
-import com.ecommerce.api.v1.product.dto.request.UpdateProductRequest;
-import com.ecommerce.api.v1.product.dto.request.UpdateProductStatusRequest;
-import com.ecommerce.api.v1.product.dto.request.UpdateStockRequest;
+import com.ecommerce.api.v1.product.dto.request.*;
 import com.ecommerce.api.v1.product.dto.response.ProductResponseDto;
 import com.ecommerce.domain.product.entity.Category;
 import com.ecommerce.domain.product.entity.Product;
 import com.ecommerce.domain.product.entity.ProductStatus;
 import com.ecommerce.domain.product.repository.ProductRepository;
+import com.ecommerce.global.utils.dto.SliceResponseDto;
 import com.ecommerce.global.utils.exception.ErrorCode;
 import com.ecommerce.global.utils.exception.ServiceException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -37,7 +41,7 @@ public class ProductService {
                 .description(request.description())
                 .brand(request.brand())
                 .stockQuantity(request.stockQuantity())
-                .status(ProductStatus.PENDING)
+                .status(ProductStatus.ACTIVE)
                 .category(categories)
                 .build();
 
@@ -94,7 +98,7 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long productId) {
         Product product = findProductEntityById(productId);
-        productRepository.delete(product);
+        product.setIsDeleted(true);
     }
 
     @Transactional
@@ -111,5 +115,27 @@ public class ProductService {
     public Product findProductEntityById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public SliceResponseDto<ProductResponseDto> searchProductsForInfiniteScroll(
+            ProductSearchCondition condition,
+            ProductSearchPageRequest pageRequest
+    ) {
+        Pageable pageable = pageRequest.toPageable();
+
+        Slice<Product> products = productRepository.findProductsWithConditions(
+                condition.keyword(),
+                condition.category(),
+                condition.brand(),
+                condition.minPrice(),
+                condition.maxPrice(),
+                condition.inStock(),
+                condition.status(),
+                pageable
+        );
+
+        Slice<ProductResponseDto> productSlice = products.map(ProductResponseDto::from);
+        return SliceResponseDto.from(productSlice);
     }
 }

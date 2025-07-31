@@ -282,14 +282,25 @@ class ProductServiceTest {
     @DisplayName("[deleteProduct][성공] - 상품 삭제")
     void deleteProduct_Success() {
         // given
+        Product product = Product.builder()
+                .id(1L)
+                .name("테스트 상품")
+                .description("테스트 설명")
+                .price(BigDecimal.valueOf(10000))
+                .stockQuantity(100)
+                .brand("테스트브랜드")
+                .status(ProductStatus.ACTIVE)
+                .isDeleted(false).build();
+
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-        doNothing().when(productRepository).delete(product);
 
         // when
         productService.deleteProduct(1L);
 
         // then
-        verify(productRepository).delete(product);
+        verify(productRepository).findById(1L);
+        assertThat(product.getIsDeleted()).isTrue();
+
     }
 
     @Test

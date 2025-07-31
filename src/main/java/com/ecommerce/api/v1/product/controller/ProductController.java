@@ -1,13 +1,11 @@
 package com.ecommerce.api.v1.product.controller;
 
-import com.ecommerce.api.v1.product.dto.request.AddProductRequest;
-import com.ecommerce.api.v1.product.dto.request.UpdateProductRequest;
-import com.ecommerce.api.v1.product.dto.request.UpdateProductStatusRequest;
-import com.ecommerce.api.v1.product.dto.request.UpdateStockRequest;
+import com.ecommerce.api.v1.product.dto.request.*;
 import com.ecommerce.api.v1.product.dto.response.ProductResponseDto;
-import com.ecommerce.domain.product.entity.Product;
+import com.ecommerce.domain.product.entity.ProductStatus;
 import com.ecommerce.domain.product.service.ProductService;
 import com.ecommerce.global.utils.dto.RsData;
+import com.ecommerce.global.utils.dto.SliceResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -66,7 +64,7 @@ public class ProductController implements ProductAPiSpecification {
     }
 
     @GetMapping("/search")
-    public RsData<Product> searchProduct(
+    public RsData<SliceResponseDto<ProductResponseDto>> searchProduct(
             // 기본 검색
             @RequestParam(required = false) String keyword,          // 상품명/설명 검색
             @RequestParam(required = false) String category,         // 카테고리
@@ -78,7 +76,7 @@ public class ProductController implements ProductAPiSpecification {
 
             // 재고/상태
             @RequestParam(required = false, defaultValue = "true") Boolean inStock,  // 재고 있는 상품만
-            @RequestParam(required = false) String status,          // 상품 상태 (ACTIVE, INACTIVE, DISCONTINUED)
+            @RequestParam(required = false) ProductStatus status,          // 상품 상태 (ACTIVE, INACTIVE, DISCONTINUED)
 
             // 평점/리뷰
             @RequestParam(required = false) Double minRating,       // 최소 평점
@@ -92,7 +90,18 @@ public class ProductController implements ProductAPiSpecification {
             @RequestParam(defaultValue = "0") int page,             // 페이지
             @RequestParam(defaultValue = "20") int size             // 사이즈
     ) {
-        return null;
+        ProductSearchCondition condition = new ProductSearchCondition(
+                keyword, category, brand, minPrice, maxPrice,
+                inStock, status
+        );
+
+        ProductSearchPageRequest pageRequest = ProductSearchPageRequest.of(page, size, sortBy, sortDir);
+
+        SliceResponseDto<ProductResponseDto> sliceProducts = productService.searchProductsForInfiniteScroll(
+                condition, pageRequest
+        );
+
+        return RsData.success(HttpStatus.OK, sliceProducts, "상품 검색이 완료되었습니다");
     }
 
     @GetMapping("/{productId}")

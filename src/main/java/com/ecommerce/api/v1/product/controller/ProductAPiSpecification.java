@@ -7,7 +7,9 @@ import com.ecommerce.api.v1.product.dto.request.UpdateProductStatusRequest;
 import com.ecommerce.api.v1.product.dto.request.UpdateStockRequest;
 import com.ecommerce.api.v1.product.dto.response.ProductResponseDto;
 import com.ecommerce.domain.product.entity.Product;
+import com.ecommerce.domain.product.entity.ProductStatus;
 import com.ecommerce.global.utils.dto.RsData;
+import com.ecommerce.global.utils.dto.SliceResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -78,7 +80,7 @@ public interface ProductAPiSpecification {
             @ApiResponse(responseCode = "400", description = "잘못된 요청"),
             @ApiResponse(responseCode = "404", description = "상품을 찾을 수 없음")
     })
-    RsData<Product> searchProduct(
+    RsData<SliceResponseDto<ProductResponseDto>> searchProduct(
             // 기본 검색
             @RequestParam(required = false) String keyword,          // 상품명/설명 검색
             @RequestParam(required = false) String category,         // 카테고리
@@ -90,7 +92,7 @@ public interface ProductAPiSpecification {
 
             // 재고/상태
             @RequestParam(required = false, defaultValue = "true") Boolean inStock,  // 재고 있는 상품만
-            @RequestParam(required = false) String status,          // 상품 상태 (ACTIVE, INACTIVE, DISCONTINUED)
+            @RequestParam(required = false) ProductStatus status,          // 상품 상태 (ACTIVE, INACTIVE, DISCONTINUED)
 
             // 평점/리뷰
             @RequestParam(required = false) Double minRating,       // 최소 평점

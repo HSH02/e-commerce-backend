@@ -40,9 +40,13 @@ public class Product extends BaseEntity {
     private String brand;
 
     @Column(nullable = false)
+    @Builder.Default
+    private Boolean isDeleted = false;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private ProductStatus status = ProductStatus.PENDING;
+    private ProductStatus status = ProductStatus.ACTIVE;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -56,6 +60,10 @@ public class Product extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> images = new ArrayList<>();
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public void updateDetails(
             String name,
