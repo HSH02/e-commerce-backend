@@ -26,8 +26,6 @@ public class ProductImage extends BaseEntity {
     @Column(nullable = false)
     private String imageUrl;
 
-    private String altText;
-
     @Column(nullable = false)
     private boolean isMain;
 

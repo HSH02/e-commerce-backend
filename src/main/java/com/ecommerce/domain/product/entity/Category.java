@@ -26,10 +26,6 @@ public class Category extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Builder.Default
-    @Column(nullable = false)
-    private boolean isActive = true;
-
     @ManyToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Product> products = new HashSet<>();

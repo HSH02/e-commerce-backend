@@ -1,4 +1,4 @@
-package com.ecommerce.api.v1.admin.dto.response;
+package com.ecommerce.api.v1.product.dto.response;
 
 import com.ecommerce.domain.product.entity.Category;
 

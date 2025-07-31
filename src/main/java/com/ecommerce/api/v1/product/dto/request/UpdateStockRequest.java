@@ -1,4 +1,4 @@
-package com.ecommerce.api.v1.admin.dto.request;
+package com.ecommerce.api.v1.product.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;

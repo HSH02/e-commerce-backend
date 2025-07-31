@@ -36,9 +36,13 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private Integer stockQuantity;
 
-    @Builder.Default
     @Column(nullable = false)
-    private boolean isActive = true;
+    private String brand;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ProductStatus status = ProductStatus.PENDING;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -56,9 +60,10 @@ public class Product extends BaseEntity {
     public void updateDetails(
             String name,
             String description,
+            String brand,
             BigDecimal price,
             Integer stockQuantity,
-            Boolean isActive
+            ProductStatus status
     ) {
         if (name != null) {
             this.name = name;
@@ -66,14 +71,17 @@ public class Product extends BaseEntity {
         if (description != null) {
             this.description = description;
         }
+        if (brand != null) {
+            this.brand = brand;
+        }
         if (price != null) {
             this.price = price;
         }
         if (stockQuantity != null) {
             this.stockQuantity = stockQuantity;
         }
-        if (isActive != null) {
-            this.isActive = isActive;
+        if (status != null) {
+            this.status = status;
         }
     }
 
@@ -82,11 +90,26 @@ public class Product extends BaseEntity {
         if (this.stockQuantity < 0) {
             throw new ServiceException(ErrorCode.STOCK_CANNOT_MINUS);
         }
+        
+        // 재고가 0이 되면 품절 상태로 변경
+        if (this.stockQuantity == 0) {
+            this.status = ProductStatus.OUT_OF_STOCK;
+        } else if (this.status == ProductStatus.OUT_OF_STOCK && this.stockQuantity > 0) {
+            // 품절 상태에서 재고가 다시 생기면 판매중으로 변경
+            this.status = ProductStatus.ACTIVE;
+        }
     }
 
-    public void addImage(ProductImage image) {
-        this.images.add(image);
-        image.setProduct(this);
+    public void updateStatus(ProductStatus status) {
+        this.status = status;
+    }
+
+    public boolean isAvailableForSale() {
+        return this.status == ProductStatus.ACTIVE && this.stockQuantity > 0;
+    }
+
+    public List<ProductImage> getImages() {
+        return images;
     }
 
     public void updateCategories(Set<Category> newCategories) {
