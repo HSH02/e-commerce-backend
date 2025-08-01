@@ -74,7 +74,6 @@ public class SecurityConfig {
                                 // OAuth2
                                 .requestMatchers("/login/oauth2/**", "/oauth2/**").permitAll()
 
-
                                 // 공개 API
                                 .requestMatchers("/api/v1/users/register").permitAll()      // 회원가입
                                 .requestMatchers("/api/v1/users/login").permitAll()         // 로그인
@@ -84,14 +83,13 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger-ui/**").permitAll()              // Swagger UI
                                 .requestMatchers("/v3/api-docs/**").permitAll()             // OpenAPI 문서
                                 .requestMatchers("/swagger-resources/**").permitAll()       // Swagger 리소스
-                                .requestMatchers("/api/v1/redis-test/**").permitAll()       // Redis
+
+
+                                .requestMatchers("/api/v1/wishlist/**").authenticated()
+                                .requestMatchers("/api/v1/cart/**").authenticated()
 
                                 // 그 외 모든 요청은 인증 필요
-
-                                // 개발용
-                                .anyRequest().permitAll()
-
-//                                 .anyRequest().authenticated()
+                                 .anyRequest().authenticated()
                 );
 
         return http.build();
